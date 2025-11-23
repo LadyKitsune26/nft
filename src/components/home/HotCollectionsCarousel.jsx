@@ -4,12 +4,11 @@ import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-// Swiper CSS
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-// Skeleton Loader for carousel
+// Skeleton Loader
 const HotCollectionsSkeleton = () => {
   return (
     <div className="row">
@@ -35,16 +34,40 @@ const HotCollectionsCarousel = () => {
   useEffect(() => {
     const fetchCollections = async () => {
       try {
+        // Fetch hot collections
         const res = await axios.get(
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/hotCollections"
         );
-        setCollections(res.data);
+
+        const items = res.data;
+
+        // Fetch author for each collection item
+        const updatedItems = await Promise.all(
+          items.map(async (item) => {
+            try {
+              const authorRes = await axios.get(
+                `https://us-central1-nft-cloud-functions.cloudfunctions.net/authors?author=${item.authorId}`
+              );
+
+              return {
+                ...item,
+                authorName: authorRes.data.authorName,
+                authorTag: authorRes.data.tag,
+              };
+            } catch {
+              return { ...item, authorName: "Unknown Author" };
+            }
+          })
+        );
+
+        setCollections(updatedItems);
       } catch (err) {
         console.error("Failed to fetch hot collections", err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchCollections();
   }, []);
 
@@ -63,7 +86,6 @@ const HotCollectionsCarousel = () => {
           slidesPerView={4}
           spaceBetween={20}
           navigation
-          pagination={{ el: ".external-swiper-pagination", clickable: true }}
           loop={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           breakpoints={{
@@ -83,7 +105,6 @@ const HotCollectionsCarousel = () => {
                   borderRadius: "12px",
                   background: "#fff",
                   boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
-                  overflow: "hidden",
                 }}
               >
                 <div className="nft_wrap">
@@ -92,7 +113,6 @@ const HotCollectionsCarousel = () => {
                       src={item.nftImage}
                       alt={item.title}
                       style={{ width: "100%", height: "220px", objectFit: "cover" }}
-                      onError={(e) => (e.currentTarget.src = "/fallback-nft.png")}
                     />
                   </Link>
                 </div>
@@ -101,24 +121,28 @@ const HotCollectionsCarousel = () => {
                   <Link to={`/author/${item.authorId}`}>
                     <img
                       src={item.authorImage}
-                      alt={item.title}
-                      style={{ width: "48px", height: "48px", borderRadius: "50%", objectFit: "cover", border: "2px solid #fff" }}
-                      onError={(e) => (e.currentTarget.src = "/fallback-author.png")}
+                      alt={item.authorName}
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        border: "2px solid #fff",
+                      }}
                     />
                   </Link>
+
                   <div className="ms-2">
-                    <Link to={`/explore/${item.id}`}>
-                      <h5 style={{ margin: 0, fontSize: "1rem" }}>{item.title}</h5>
+                    <Link to={`/author/${item.authorId}`}>
+                      <h5 style={{ margin: 0, fontSize: "1rem" }}>{item.authorName}</h5>
                     </Link>
-                    <small className="text-muted">ERC-{item.code}</small>
+                    <small className="text-muted">@{item.authorTag}</small>
                   </div>
                 </div>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
-
-        {/* <div className="external-swiper-pagination text-center mt-4"></div> */}
       </div>
     </section>
   );
