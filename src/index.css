@@ -216,3 +216,55 @@ External pagination bullets
   border-radius: 14px;
   overflow: hidden;
 }
+
+.author-nft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.nft__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nft__item img {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* keeps square ratio for all cards */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.nft__item_info {
+  padding: 10px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.author_icon_top_left {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.author_icon_top_left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}

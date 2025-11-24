@@ -4,7 +4,6 @@ import axios from "axios";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-import AuthorItems from "../components/author/AuthorItems";
 import AuthorBannerFallback from "../images/author_banner.jpg";
 import AuthorImageFallback from "../images/author_thumbnail.jpg";
 
@@ -56,9 +55,7 @@ const Author = () => {
           data-aos="zoom-in"
           data-aos-delay="50"
           style={{
-            background: `url(${
-              author.nftCollection?.[0]?.nftImage || AuthorBannerFallback
-            }) top`,
+            background: `url(${author.nftCollection?.[0]?.nftImage || AuthorBannerFallback}) top`,
           }}
         ></section>
 
@@ -66,9 +63,7 @@ const Author = () => {
         <section aria-label="section" data-aos="fade-up" data-aos-delay="200">
           <div className="container">
             <div className="row">
-
               <div className="col-md-12">
-
                 {/* Profile Box */}
                 <div
                   className="d_profile de-flex"
@@ -76,7 +71,6 @@ const Author = () => {
                   data-aos-delay="300"
                 >
                   <div className="de-flex-col">
-
                     {/* Avatar */}
                     <div
                       className="profile_avatar"
@@ -106,16 +100,13 @@ const Author = () => {
                           <button
                             id="btn_copy"
                             title="Copy Text"
-                            onClick={() =>
-                              navigator.clipboard.writeText(author.address)
-                            }
+                            onClick={() => navigator.clipboard.writeText(author.address)}
                           >
                             Copy
                           </button>
                         </h4>
                       </div>
                     </div>
-
                   </div>
 
                   {/* Follow Section */}
@@ -125,10 +116,7 @@ const Author = () => {
                     data-aos-delay="600"
                   >
                     <div className="de-flex-col">
-                      <div className="profile_follower">
-                        {author.followers} followers
-                      </div>
-
+                      <div className="profile_follower">{author.followers} followers</div>
                       <Link to="#" className="btn-main">
                         Follow
                       </Link>
@@ -138,13 +126,38 @@ const Author = () => {
               </div>
 
               {/* Author NFTs */}
-              <div
-                className="col-md-12"
-                data-aos="fade-up"
-                data-aos-delay="700"
-              >
-                <div className="de_tab tab_simple">
-                  <AuthorItems nftCollection={author.nftCollection} />
+              <div className="col-md-12" data-aos="fade-up" data-aos-delay="700">
+                <div className="author-nft-grid">
+                  {author.nftCollection?.map((nft) => (
+                    <div key={nft.nftId} className="nft__item">
+                      {/* Small round author icon in top-left */}
+                      <div className="author_icon_top_left">
+                        <img
+                          src={author.authorImage || AuthorImageFallback}
+                          alt={author.authorName}
+                        />
+                      </div>
+
+                      {/* NFT Image */}
+                      <Link to={`/new-item-details/${nft.nftId}`}>
+                        <img
+                          src={nft.nftImage}
+                          alt={nft.title}
+                          onError={(e) => (e.currentTarget.src = AuthorBannerFallback)}
+                        />
+                      </Link>
+
+                      {/* NFT Info */}
+                      <div className="nft__item_info">
+                        <h6>{nft.title}</h6>
+                        <div className="nft__item_price">{nft.price || "N/A"} ETH</div>
+                        <div className="nft__item_like">
+                          <i className="fa fa-heart"></i>
+                          <span>{nft.likes || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -157,6 +170,12 @@ const Author = () => {
 };
 
 export default Author;
+
+
+
+
+
+
 
 
 

@@ -7,7 +7,7 @@ import "aos/dist/aos.css";
 import EthImage from "../images/ethereum.svg";
 import AuthorImageFallback from "../images/author_thumbnail.jpg";
 
-// Skeleton loader while fetching
+// Skeleton Loader
 const NewItemsDetailsSkeleton = () => {
   return (
     <div className="container my-5" data-aos="fade-in">
@@ -31,6 +31,9 @@ const NewItemsDetails = () => {
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Countdown state
+  const [countdown, setCountdown] = useState("");
+
   useEffect(() => {
     AOS.init({
       duration: 900,
@@ -39,6 +42,7 @@ const NewItemsDetails = () => {
     });
   }, []);
 
+  // Fetch item + author
   useEffect(() => {
     const fetchItem = async () => {
       setLoading(true);
@@ -47,7 +51,10 @@ const NewItemsDetails = () => {
           "https://us-central1-nft-cloud-functions.cloudfunctions.net/newItems"
         );
 
-        const foundItem = nftRes.data.find((i) => Number(i.nftId) === Number(nftId));
+        const foundItem = nftRes.data.find(
+          (i) => Number(i.nftId) === Number(nftId)
+        );
+
         setItem(foundItem || null);
 
         if (foundItem) {
@@ -68,12 +75,36 @@ const NewItemsDetails = () => {
     fetchItem();
   }, [nftId]);
 
+  // Dynamic countdown
+  useEffect(() => {
+    if (!item?.expiryDate) return;
+
+    const targetTime = new Date(item.expiryDate).getTime();
+
+    const timer = setInterval(() => {
+      const now = Date.now();
+      const distance = targetTime - now;
+
+      if (distance <= 0) {
+        setCountdown("EXPIRED");
+        clearInterval(timer);
+        return;
+      }
+
+      const hours = Math.floor(distance / (1000 * 60 * 60));
+      const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setCountdown(`${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [item]);
+
   if (loading) return <NewItemsDetailsSkeleton />;
   if (!item) return <p className="text-center mt-5">Item not found.</p>;
-
-  const expiryDate = item.expiryDate
-    ? new Date(item.expiryDate).toLocaleString()
-    : "N/A";
 
   return (
     <div id="wrapper">
@@ -83,73 +114,75 @@ const NewItemsDetails = () => {
         <section aria-label="section" className="mt90 sm-mt-0">
           <div className="container">
 
-            <div className="row">
+            <div className="row justify-content-center align-items-start">
 
               {/* NFT Image */}
               <div
-                className="col-md-6 text-center"
+                className="col-md-5 text-center mb-4"
                 data-aos="zoom-in"
                 data-aos-delay="100"
               >
                 <img
                   src={item.nftImage}
-                  className="img-fluid img-rounded mb-sm-30 nft-image"
+                  className="img-fluid img-rounded nft-image"
                   alt={item.title}
+                  style={{
+                    width: "100%",
+                    maxHeight: "500px",
+                    objectFit: "cover",
+                  }}
                   onError={(e) => (e.currentTarget.src = "/fallback-nft.png")}
                 />
               </div>
 
               {/* NFT Info */}
-              <div
-                className="col-md-6"
-                data-aos="fade-up"
-                data-aos-delay="200"
-              >
+              <div className="col-md-7" data-aos="fade-up" data-aos-delay="200">
                 <div className="item_info">
 
                   <h2 data-aos="fade-right" data-aos-delay="300">
                     {item.title}
                   </h2>
 
+                  {/* Views & Likes */}
                   <div
-                    className="item_info_counts"
+                    className="item_info_counts mb-3"
                     data-aos="fade-right"
                     data-aos-delay="400"
                   >
                     <div className="item_info_views">
                       <i className="fa fa-eye"></i> {item.views || 0}
                     </div>
-                    <div className="item_info_like">
+                    <div className="item_info_like ms-3">
                       <i className="fa fa-heart"></i> {item.likes || 0}
                     </div>
                   </div>
 
+                  {/* Description */}
                   <p data-aos="fade-in" data-aos-delay="500">
                     {item.description || "No description available."}
                   </p>
 
                   <div
-                    className="d-flex flex-row mb-3"
+                    className="row mt-4"
                     data-aos="fade-up"
                     data-aos-delay="600"
                   >
+                    {/* Owner */}
                     {author && (
-                      <div className="mr-4">
+                      <div className="col-md-6 mb-3">
                         <h6>Owner</h6>
-
-                        <div className="item_author">
+                        <div className="item_author d-flex align-items-center">
                           <div className="author_list_pp">
                             <Link to={`/author/${author.authorId}`}>
                               <img
-                                className="lazy"
                                 src={author.authorImage || AuthorImageFallback}
                                 alt={author.authorName}
+                                className="lazy"
                               />
                               <i className="fa fa-check"></i>
                             </Link>
                           </div>
-
-                          <div className="author_list_info">
+                          <div className="author_list_info ms-2">
                             <Link to={`/author/${author.authorId}`}>
                               {author.authorName}
                             </Link>
@@ -158,53 +191,64 @@ const NewItemsDetails = () => {
                       </div>
                     )}
 
-                    <div>
-                      <h6>Expiry Date</h6>
-                      <div>{expiryDate}</div>
+                    {/* Countdown */}
+                    <div className="col-md-6 mb-3">
+                      <h6>Time Left</h6>
+                      <div
+                        style={{
+                          fontSize: "1.2rem",
+                          fontWeight: "600",
+                          color: countdown === "EXPIRED" ? "red" : "#333",
+                        }}
+                      >
+                        {countdown}
+                      </div>
                     </div>
-                  </div>
 
-                  <div
-                    className="de_tab tab_simple"
-                    data-aos="fade-up"
-                    data-aos-delay="700"
-                  >
-                    <div className="de_tab_content">
-                      <h6>Creator</h6>
-                      {author && (
-                        <div className="item_author">
+                    {/* Creator */}
+                    {author && (
+                      <div className="col-md-6 mb-4">
+                        <h6>Creator</h6>
+                        <div className="item_author d-flex align-items-center">
                           <div className="author_list_pp">
                             <Link to={`/author/${author.authorId}`}>
                               <img
-                                className="lazy"
                                 src={author.authorImage || AuthorImageFallback}
                                 alt={author.authorName}
+                                className="lazy"
                               />
                               <i className="fa fa-check"></i>
                             </Link>
                           </div>
-
-                          <div className="author_list_info">
+                          <div className="author_list_info ms-2">
                             <Link to={`/author/${author.authorId}`}>
                               {author.authorName}
                             </Link>
                           </div>
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
-                    <div className="spacer-40"></div>
-
-                    <h6>Price</h6>
-                    <div className="nft-item-price">
-                      <img src={EthImage} alt="" />
-                      <span>{item.price || "N/A"}</span>
+                    {/* Price */}
+                    <div className="col-md-6 mb-4">
+                      <h6>Price</h6>
+                      <div className="nft-item-price d-flex align-items-center">
+                        <img src={EthImage} alt="ETH" style={{ width: "20px" }} />
+                        <span className="ms-2">{item.price || "N/A"} ETH</span>
+                      </div>
                     </div>
                   </div>
 
                 </div>
               </div>
 
+            </div>
+
+            {/* Back button */}
+            <div className="text-center mt-5">
+              <Link to="/new-items" className="btn btn-primary">
+                Back
+              </Link>
             </div>
 
           </div>
