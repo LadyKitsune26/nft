@@ -268,3 +268,93 @@ External pagination bullets
   object-fit: cover;
   border-radius: 50%;
 }
+
+
+/* ---------- MOBILE (max 480px) ---------- */
+@media (max-width: 480px) {
+  .explore-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  .explore-card {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .nft__item_preview {
+    height: 250px !important;
+    object-fit: cover;
+  }
+
+  .author_list_pp {
+    top: 10px !important;
+    left: 10px !important;
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .explore-filters select {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+/* ---------- TABLET (481px – 768px) ---------- */
+@media (min-width: 481px) and (max-width: 768px) {
+  .explore-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 22px;
+  }
+
+  .explore-card {
+    width: 100%;
+  }
+
+  .nft__item_preview {
+    height: 260px !important;
+    object-fit: cover;
+  }
+
+  .author_list_pp {
+    width: 42px !important;
+    height: 42px !important;
+    top: 12px !important;
+    left: 12px !important;
+  }
+}
+
+/* ---------- SMALL LAPTOPS (769px – 1024px) ---------- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .explore-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 25px;
+  }
+
+  .nft__item_preview {
+    height: 280px !important;
+  }
+
+  .author_list_pp {
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+/* ---------- LARGE DESKTOPS (1440px+) ---------- */
+@media (min-width: 1440px) {
+  .explore-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 30px;
+  }
+
+  .nft__item_preview {
+    height: 320px !important;
+  }
+
+  .author_list_pp {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
