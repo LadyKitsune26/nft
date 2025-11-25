@@ -270,6 +270,7 @@ External pagination bullets
 }
 
 
+/* ----------- Explore Page ---------------*/
 /* ---------- MOBILE (max 480px) ---------- */
 @media (max-width: 480px) {
   .explore-grid {
@@ -356,5 +357,213 @@ External pagination bullets
   .author_list_pp {
     width: 50px !important;
     height: 50px !important;
+  }
+}
+
+
+/* ---------------- New Items Details Page------------*/
+/* ---------------- MOBILE (max 480px) ---------------- */
+@media (max-width: 480px) {
+  .nft-image {
+    max-height: 320px !important;
+    object-fit: cover;
+  }
+
+  .item_info h2 {
+    font-size: 1.6rem !important;
+    text-align: center;
+  }
+
+  .item_info_counts {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .item_info_views,
+  .item_info_like {
+    font-size: 0.95rem;
+  }
+
+  .item_info p {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .item_author {
+    justify-content: center;
+  }
+
+  .author_list_pp {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .row.mt-4 .col-md-6 {
+    text-align: center !important;
+  }
+
+  .nft-item-price {
+    justify-content: center !important;
+  }
+
+  .container {
+    padding: 0 14px;
+  }
+
+  .row.justify-content-center {
+    flex-direction: column !important;
+  }
+}
+
+/* ---------------- SMALL TABLET (481px – 768px) ---------------- */
+@media (min-width: 481px) and (max-width: 768px) {
+  .nft-image {
+    max-height: 380px !important;
+    object-fit: cover;
+  }
+
+  .item_info h2 {
+    font-size: 1.9rem !important;
+  }
+
+  .author_list_pp {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .row.justify-content-center {
+    flex-direction: column !important;
+  }
+
+  .item_author {
+    justify-content: flex-start;
+  }
+}
+
+/* ---------------- TABLET / SMALL LAPTOP (769px – 1024px) ---------------- */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nft-image {
+    max-height: 450px !important;
+  }
+
+  .item_info h2 {
+    font-size: 2.1rem !important;
+  }
+
+  .author_list_pp {
+    width: 56px !important;
+    height: 56px !important;
+  }
+}
+
+/* ---------------- LARGE DESKTOPS (1440px+) ---------------- */
+@media (min-width: 1440px) {
+  .nft-image {
+    max-height: 550px !important;
+  }
+
+  .item_info h2 {
+    font-size: 2.6rem !important;
+  }
+
+  .author_list_pp {
+    width: 60px !important;
+    height: 60px !important;
+  }
+}
+
+
+
+
+/* ------------------------Top Sellers-------------------*/
+/* ---------------- TABLET & SMALL LAPTOP (max-width: 1024px) ---------------- */
+@media (max-width: 1024px) {
+  .author_list li {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+  }
+
+  .author_list_pp {
+    width: 55px !important;
+    height: 55px !important;
+  }
+
+  .author_list_info a {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ---------------- TABLET (max-width: 768px) ---------------- */
+@media (max-width: 768px) {
+  .author_list li {
+    padding: 10px 0 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  .author_list_pp {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .author_list_info {
+    margin-left: 10px !important;
+    text-align: left !important;
+  }
+
+  .author_list_info span {
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ---------------- MOBILE (max-width: 600px) ---------------- */
+@media (max-width: 600px) {
+  .author_list li {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  .author_list_pp {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  .pp-author {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .author_list_info {
+    flex: 1;
+    text-align: left !important;
+  }
+
+  .author_list_info a {
+    font-size: 1rem !important;
+  }
+}
+
+/* ---------------- SMALL MOBILE (max-width: 420px) ---------------- */
+@media (max-width: 420px) {
+  .author_list li {
+    padding: 8px 0 !important;
+    gap: 10px !important;
+  }
+
+  .author_list_pp {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .author_list_info a {
+    font-size: 0.95rem !important;
+  }
+
+  .author_list_info span {
+    font-size: 0.85rem !important;
   }
 }
